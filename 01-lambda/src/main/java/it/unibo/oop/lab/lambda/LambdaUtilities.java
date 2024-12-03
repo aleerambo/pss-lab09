@@ -2,6 +2,7 @@ package it.unibo.oop.lab.lambda;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -63,16 +64,8 @@ public final class LambdaUtilities {
     public static <T> List<Optional<T>> optFilter(final List<T> list, final Predicate<T> pre) {
         /*
          * Suggestion: consider Optional.filter
-         * 
-         * - Crea una nuova lista vuota per contenere i risultati (es. List<Optional<T>>).
-         * - Itera sugli elementi della lista originale usando un ciclo for o forEach.
-         * - Per ogni elemento:
-         *      - Se il predicato restituisce true, aggiungi un Optional.of(elemento) alla nuova lista.
-         *      - Altrimenti, aggiungi Optional.empty().
-         *      - Restituisci la nuova lista.
          */
         final List<Optional<T>> l = new ArrayList<>();
-
         list.forEach(element -> l.add(Optional.of(element).filter(pre)));
 
         return l;
@@ -94,7 +87,17 @@ public final class LambdaUtilities {
         /*
          * Suggestion: consider Map.merge
          */
-        return emptyMap();
+        final Map<R, Set<T>> map = new HashMap<>();
+        list.forEach(l -> {
+            Set<T> set = new HashSet<>();
+            set.add(l);
+            map.merge(op.apply(l), set, (oldSet, newSet) -> {
+                oldSet.addAll(newSet);
+                return oldSet;
+            });
+        });
+
+        return map;
     }
 
     /**
