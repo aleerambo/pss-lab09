@@ -63,8 +63,19 @@ public final class LambdaUtilities {
     public static <T> List<Optional<T>> optFilter(final List<T> list, final Predicate<T> pre) {
         /*
          * Suggestion: consider Optional.filter
+         * 
+         * - Crea una nuova lista vuota per contenere i risultati (es. List<Optional<T>>).
+         * - Itera sugli elementi della lista originale usando un ciclo for o forEach.
+         * - Per ogni elemento:
+         *      - Se il predicato restituisce true, aggiungi un Optional.of(elemento) alla nuova lista.
+         *      - Altrimenti, aggiungi Optional.empty().
+         *      - Restituisci la nuova lista.
          */
-        return emptyList();
+        final List<Optional<T>> l = new ArrayList<>();
+
+        list.forEach(element -> l.add(Optional.of(element).filter(pre)));
+
+        return l;
     }
 
     /**
